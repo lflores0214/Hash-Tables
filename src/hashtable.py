@@ -102,6 +102,7 @@ class HashTable:
             print("ERROR: No item at this index")
             return None
         else:
+            #if it isn't return the value
             return self.storage[index]
 
     def resize(self):
@@ -116,7 +117,10 @@ class HashTable:
         #make new storage with new capacity
         new_storage = [None] * self.capacity
         #copy all items over
+        for item in range(len(self.storage)):
+            new_storage[item] = self.storage[item]
         self.storage = new_storage
+        print(self.storage)
 
 
 if __name__ == "__main__":
