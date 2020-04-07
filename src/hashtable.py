@@ -190,16 +190,19 @@ class HashTable:
 
         Fill this in.
         '''
-        # double capacity
-        self.capacity *= 2
-        # make new storage with new capacity
-        new_storage = [None] * self.capacity
-        # copy all items over
-        for item in range(len(self.storage)):
-            new_storage[item] = self.storage[item]
-        self.storage = new_storage
-        print(self.storage)
-
+        # make new hashtable with double capacity
+        new_ht = HashTable(self.capacity * 2)
+        # copy all items that are not none with a loop
+        for item in self.storage:
+            # set a temp variable with the current item
+            current_item = item
+            while current_item is not None:
+                new_ht.insert(current_item.key, current_item.value)
+                # set current_item to current_item.next to keep the loop going
+                current_item = current_item.next
+        # update the existing storage
+        self.capacity = self.capacity*2
+        self.storage = new_ht.storage
 
 if __name__ == "__main__":
     ht = HashTable(2)
