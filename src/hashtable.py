@@ -54,7 +54,17 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # hash the key and make it the index
+        index = self._hash_mod(key)
+        
+        #check for collisions and return an error message if there is one
+        if self.storage[index] != None:
+            print("ERROR: item already exists at this index")
+            return
+        #if there is not a collision add the key: value 
+        else:
+            self.storage[index] = value
+            return 
 
     def remove(self, key):
         '''
@@ -64,7 +74,17 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+         # hash the key and make it the index
+        index = self._hash_mod(key)
+        #check if the key exists
+        if self.storage[index] == None:
+            # if it doesn't, print error
+            print("key not found")
+            return
+        else:
+            # if it does remove it
+            self.storage[index] = None
+            return self.storage[index]
 
     def retrieve(self, key):
         '''
@@ -74,7 +94,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # hash the key and make it the index
+        index = self._hash_mod(key)
+        # check if key is in storage
+        if self.storage[index] == None or index >= self.capacity:
+            #if it is print error message and return
+            print("ERROR: No item at this index")
+            return None
+        else:
+            return self.storage[index]
 
     def resize(self):
         '''
@@ -83,7 +111,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        #double capacity
+        self.capacity *= 2
+        #make new storage with new capacity
+        new_storage = [None] * self.capacity
+        #copy all items over
+        self.storage = new_storage
 
 
 if __name__ == "__main__":
