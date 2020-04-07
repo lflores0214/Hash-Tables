@@ -9,6 +9,9 @@ class LinkedPair:
         self.value = value
         self.next = None
 
+    def __repr__(self):
+        return f"<{self.key},{self.value}"
+
 
 class HashTable:
     '''
@@ -54,17 +57,54 @@ class HashTable:
 
         Fill this in.
         '''
+        # * Class solution
+        # # hashmod the key to find the bucket
+        # index = self._hash_mod(key)
+
+        # # check if a pair already exists in the bucket
+        # pair = self.storage[index]
+        # if pair is not None:
+        #     if pair.key != key:
+        #         # if so overwrite the keyvalue and throw a warning
+        #         print("warning: overwriting value")
+        #         pair.key = key
+        #     pair.value = value
+        #     # if not create a new linked pair and place it in the bucket
+        # else:
+        #     self.storage[index] = LinkedPair(key, value)
+
+        # * Day 1
+        # # hash the key and make it the index
+        # index = self._hash_mod(key)
+
+        # # check for collisions and return an error message if there is one
+        # if self.storage[index] is not None:
+        #     print("ERROR: item already exists at this index")
+        #     return
+        # # if there is not a collision add the key: value
+        # else:
+        #     self.storage[index] = LinkedPair(key,value)
+            
+        # * Day 2
         # hash the key and make it the index
         index = self._hash_mod(key)
-        
-        #check for collisions and return an error message if there is one
-        if self.storage[index] != None:
-            print("ERROR: item already exists at this index")
+        pair = self.storage[index]
+        # set temp variable to store current pair before it gets overwritten
+        temp = None
+        # check for collisions
+        if pair is None:
+            # if there is not a collision  add the key: value
+            self.storage[index] = LinkedPair(key, value)
             return
-        #if there is not a collision add the key: value 
-        else:
-            self.storage[index] = value
-            return 
+        # if there is a collision loop through the list until you reach a node without a next value and set the key: value as next
+        while pair is not None:
+            # if there is a collision and keys are the same overwrite value
+            if pair.key == key:
+                pair.value = value
+            temp = pair
+            pair = pair.next
+        # if we reach the end append the new node there
+        temp.next = LinkedPair(key, value)
 
     def remove(self, key):
         '''
@@ -74,9 +114,20 @@ class HashTable:
 
         Fill this in.
         '''
-         # hash the key and make it the index
+        # * Class Solution
+        # index = self._hash_mod(key)
+        # #check if a pair exists in the bucket with matching keys
+        # if self.storage[index] is not None and self.storage[index].key == key:
+        #     #if so remove the pair
+        #     self.storage[index] = None
+        # else:
+        #     #else print warning
+        #     print("Warning: Key does not exist ")
+
+        # * My solution
+        # hash the key and make it the index
         index = self._hash_mod(key)
-        #check if the key exists
+        # check if the key exists
         if self.storage[index] == None:
             # if it doesn't, print error
             print("key not found")
@@ -94,16 +145,43 @@ class HashTable:
 
         Fill this in.
         '''
+        # * Class Solution
+        # index = self._hash_mod(key)
+
+        # #check if a pair exists in the bucket with matching keys
+        # if self.storage[index] is not None and self.storage[index].key == key:
+        #     # if so return the value
+        #     return self.storage[index].value
+        # else:
+        #     # else return none
+        #     return None
+
+        # # * Day 1
+        # # hash the key and make it the index
+        # index = self._hash_mod(key)
+        # # check if key is in storage
+        # if self.storage[index] == None:
+        #     # if it is print error message and return
+        #     print("ERROR: No item at this index")
+        #     return None
+        # else:
+        #     # if it isn't return the value
+        #     return self.storage[index].value
+
+        # * Day 2
         # hash the key and make it the index
         index = self._hash_mod(key)
-        # check if key is in storage
-        if self.storage[index] == None or index >= self.capacity:
-            #if it is print error message and return
-            print("ERROR: No item at this index")
-            return None
-        else:
-            #if it isn't return the value
-            return self.storage[index]
+        pair = self.storage[index]
+        # loop through the linked list at the given index until the keys match
+        while pair is not None:
+            # if the keys match return the value
+            if pair.key == key:
+                return pair.value
+            # set pair to pair.next to keep the loop going
+            pair = pair.next
+
+        # if the key is not found, return None
+        return None
 
     def resize(self):
         '''
@@ -112,11 +190,11 @@ class HashTable:
 
         Fill this in.
         '''
-        #double capacity
+        # double capacity
         self.capacity *= 2
-        #make new storage with new capacity
+        # make new storage with new capacity
         new_storage = [None] * self.capacity
-        #copy all items over
+        # copy all items over
         for item in range(len(self.storage)):
             new_storage[item] = self.storage[item]
         self.storage = new_storage
